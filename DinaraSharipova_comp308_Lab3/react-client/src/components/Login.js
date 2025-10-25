@@ -15,6 +15,7 @@ function App(props) {
   //store input field data, user name and password
   const [studentNumber, setUsername] = useState();
   const [password, setPassword] = useState();
+  const [error, setError] = useState('');
   const apiUrl = "http://localhost:5001/signin";
   //send studentNumber and password to the server
   // for initial authentication
@@ -23,22 +24,42 @@ function App(props) {
     console.log(studentNumber)
     try {
       if(studentNumber==null||password==null||studentNumber==''||password==''){
-        
+        setError('Please fill in all fields');
+        return;
       }
+      setError('');
       //make a get request to /authenticate end-point on the server
       const loginData = { auth: { studentNumber, password } }
-      //call api
-      const res = await axios.post(apiUrl, loginData);
-      console.log(res.data.auth)
+      //call api with credentials to allow cookies
+      const res = await axios.post(apiUrl, loginData, {
+        withCredentials: true
+      });
+      console.log('Full response:', res)
       console.log(res.data.screen)
       //process the response
-      if (res.data.screen !== undefined) {
+      console.log('Response data:', res.data);
+      console.log('Screen value:', res.data.screen);
+      console.log('Screen is undefined?', res.data.screen === undefined);
+      
+      if (res.data.screen !== undefined && res.data.screen !== null && res.data.screen !== '') {
+        console.log('Setting screen to:', res.data.screen);
+        console.log('Setting student to:', res.data.student);
         setScreen(res.data.screen);
         setStudent(res.data.student);
-        console.log(res.data.screen);
+        console.log('Login successful! Screen:', res.data.screen);
+      } else {
+        console.log('Login response missing screen or is empty');
+        setError(res.data.message || 'Login failed - no screen data returned');
       }
     } catch (e) { //print the error
-      console.log(e);
+      console.error('Login error caught!');
+      console.error('Error response status:', e.response?.status);
+      console.error('Error response data:', e.response?.data);
+      console.error('Error message:', e.message);
+      console.log('Full error object:', e);
+      
+      const errorMessage = e.response?.data?.message || e.response?.data?.error || e.message || 'Login failed. Please check your credentials.';
+      setError(errorMessage);
     }
   
   };
@@ -48,14 +69,17 @@ function App(props) {
     try {
       console.log('--- in readCookie function ---');
 
-      //
-      const res = await axios.get('http://localhost:5001/read_cookie');
-      // 
+      //call with credentials to allow cookies
+      const res = await axios.get('http://localhost:5001/read_cookie', {
+        withCredentials: true
+      });
+      console.log('Cookie check response:', res.data)
       if (res.data.screen !== undefined) {
         setScreen(res.data.screen);
         console.log(res.data.screen)
       }
     } catch (e) {
+      console.log('Cookie check error:', e.message);
       setScreen('auth');
       console.log(e);
     }
@@ -65,24 +89,63 @@ function App(props) {
   useEffect(() => {
     readCookie();
   }, []); //only the first render
+  
+  // Debug: log when screen changes
+  useEffect(() => {
+    console.log('Screen state changed to:', screen);
+  }, [screen]);
+  
   //
   return (
     <div className="App container">
       {screen === 'auth' 
-        ? <div className="col-md-8 offset-md-2 LoginWrapper">
-          <Form.Group>
-            <Form.Label>Student Number: </Form.Label>
-            <Form.Control type="text" onChange={e => setUsername(e.target.value)} />
-          </Form.Group>
-          <Form.Label>Password: </Form.Label>
-          
-          <Form.Control type="password" onChange={e => setPassword(e.target.value)}/>
-          <br/>
-          <Button variant="primary" onClick={auth}>Login</Button>
-          <br/>
-          <br/>
-          <p className="note_para">If you don't have an account, you can <a href="/create">register</a></p>
-        </div>
+        ? <div className="col-md-6 offset-md-3 LoginWrapper fade-in">
+            <div className="card shadow" style={{maxWidth: '500px'}}>
+              <div className="card-body">
+                <h2 className="card-title text-center mb-4">🎓 Welcome Back</h2>
+                <p className="text-center text-muted mb-4">Academic Hub Management System</p>
+                
+                {error && (
+                  <div className="alert alert-danger mb-4">
+                    ⚠️ {error}
+                  </div>
+                )}
+
+                <Form.Group className="mb-4">
+                  <Form.Label>Student Number</Form.Label>
+                  <Form.Control 
+                    type="text" 
+                    placeholder="Enter your student number"
+                    onChange={e => setUsername(e.target.value)} 
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-4">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control 
+                    type="password" 
+                    placeholder="Enter your password"
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                </Form.Group>
+
+                <Button 
+                  className="w-100 mb-3" 
+                  variant="primary" 
+                  onClick={auth}
+                  style={{fontWeight: '600', padding: '12px'}}
+                >
+                  🔐 Login
+                </Button>
+
+                <div className="text-center">
+                  <p className="note_para" style={{marginBottom: 0}}>
+                    Don't have an account? <a href="/create" style={{color: '#a29bfe'}}>Register here</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         : <View screen={screen} setScreen={setScreen} student={student} setStudent={setStudent} />
       }
     </div>

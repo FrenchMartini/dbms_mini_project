@@ -17,11 +17,17 @@ function CreateUser(props) {
     e.preventDefault();
     const data = { firstName: student.firstName, lastName: student.lastName, 
       email: student.email,studentNumber: student.studentNumber,phone: student.phone, password: student.password, address: student.address, city: student.city, phone: student.phone, program: student.program};
-    axios.post(apiUrl, data)
+    axios.post(apiUrl, data, {
+      withCredentials: true
+    })
       .then((result) => {
+        console.log('Student created successfully:', result.data);
         setShowLoading(false);
         props.history.push('/login');
-      }).catch((error) => setShowLoading(false));
+      }).catch((error) => {
+        console.error('Error creating student:', error.response?.data || error.message);
+        setShowLoading(false);
+      });
   };
 
   const onChange = (e) => {

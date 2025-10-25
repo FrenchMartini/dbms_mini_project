@@ -25,8 +25,10 @@ var server = http.createServer(app);
 var io = socketIo(server, {
     cors: {
         origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    transports: ['websocket', 'polling']
 });
 
 // Socket.IO connection handling
@@ -63,14 +65,14 @@ io.on('connection', (socket) => {
 // Make io accessible to routes
 app.set('io', io);
 
-    // Use the HTTP server to listen to the '5000' port
+    // Use the HTTP server to listen to the '5001' port
     server.listen(5001);
     // Use the module.exports property to expose our Express application instance for external usage
     module.exports = app; //returns the application object
     // Log the server status to the console
-    console.log('Server running at http://localhost:5000/');
-    console.log('Socket.IO server initialized');
-    console.log('GraphQL server running at http://localhost:5000/graphql');
+    console.log('Server running at http://localhost:5001/');
+    console.log('Socket.IO server initialized on port 5001');
+    console.log('GraphQL server running at http://localhost:5001/graphql');
 }
 
 // Start the server

@@ -31,17 +31,18 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 function App(props) {
   return (
     <Router>
-      <Navbar bg="light" expand="lg">
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar bg="dark" expand="lg" className="navbar">
+        <Navbar.Brand href="/login">📚 Academic Hub</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <Nav.Link href="/login">Home</Nav.Link>
-          <Nav.Link href="/listOfStudents">List of All Students</Nav.Link>
-          <Nav.Link href="/listOfCourses">List of All Courses</Nav.Link>
-          <Nav.Link href="/realTimeEnrollment">Real-Time Enrollment</Nav.Link>
-          <Nav.Link href="/graphql">GraphQL Client</Nav.Link>
-          <Nav.Link href="/analytics">Analytics Dashboard</Nav.Link>
-        </Nav>
+          <Nav className="ml-auto">
+            <Nav.Link href="/login" className="nav-link">Home</Nav.Link>
+            <Nav.Link href="/listOfStudents" className="nav-link">All Students</Nav.Link>
+            <Nav.Link href="/listOfCourses" className="nav-link">All Courses</Nav.Link>
+            <Nav.Link href="/realTimeEnrollment" className="nav-link">Enrollment</Nav.Link>
+            <Nav.Link href="/graphql" className="nav-link">GraphQL</Nav.Link>
+            <Nav.Link href="/analytics" className="nav-link">Analytics</Nav.Link>
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
       <Route exact path="/">
