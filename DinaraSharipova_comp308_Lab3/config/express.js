@@ -47,12 +47,21 @@ module.exports = async function () {
     }));
     app.use(bodyParser.json()); //use middleware that only parses json
     app.use(cookieParser());
+    
+    // Configure CORS to allow credentials
+    const corsOptions = {
+        origin: 'http://localhost:3000',
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization']
+    };
+    app.use(cors(corsOptions));
+    
+    // Additional CORS headers for compatibility
     app.use(function(req, res, next) {
-		res.header("Access-Control-Allow-Origin", "*");
-		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		next();
+        res.header("Access-Control-Allow-Credentials", "true");
+        next();
     });
-    app.use(cors());
     //
     app.use(methodOverride()); // use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
     //handle the use of PUT or DELETE methods

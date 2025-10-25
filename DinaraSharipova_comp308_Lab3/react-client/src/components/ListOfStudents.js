@@ -44,40 +44,59 @@ function ListOfStudents(props) {
   return (
     <div>
       {data.length !== 0 ? (
-        <div>
+        <div className="fade-in">
           {showLoading && (
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
+            <div style={{textAlign: 'center', padding: '40px'}}>
+              <Spinner animation="border" role="status" style={{color: '#6c5ce7'}}>
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+              <p className="text-muted mt-3">Loading students...</p>
+            </div>
           )}
-          <div class="header">
-          <div class="mask">
-          <div class="d-flex justify-content-center align-items-center h-200">
-            <div class="text-white margin-class">List Of all Students </div> </div> </div> </div>
+          <div className="header">
+            <div className="mask">
+              <div style={{textAlign: 'center'}}>
+                <h1 style={{fontSize: '3rem', marginBottom: '1rem'}}>👥 All Students</h1>
+                <p style={{fontSize: '1.1rem', color: '#a29bfe'}}>Comprehensive student directory</p>
+              </div>
+            </div>
+          </div>
         
           <Container>
-          <ListGroup className="text-center wrapperList">
-            {data.map((item, idx) => (
-              <ListGroup.Item
-                key={idx}
-                // action
-                // onClick={() => {
-                //   showDetail(item.studentNumber);
-                // }}
-              >
-                {item.firstName +
-                  " " +
-                  item.lastName +
-                  " | (ID: " +
-                  item.studentNumber +
-                  ") | From "+
-                  item.city + " | In Program: "
-                  +item.program
-                  }
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-
+            <ListGroup className="wrapperList">
+              {data.length > 0 ? (
+                data.map((item, idx) => (
+                  <ListGroup.Item
+                    key={idx}
+                    className="list-group-item slide-in"
+                    style={{
+                      animationDelay: `${idx * 0.05}s`,
+                      cursor: 'pointer',
+                      marginBottom: '12px'
+                    }}
+                    onClick={() => showDetail(item.studentNumber)}
+                  >
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                      <div>
+                        <div style={{fontSize: '1.1rem', fontWeight: '600', color: '#a29bfe'}}>
+                          {item.firstName} {item.lastName}
+                        </div>
+                        <div style={{fontSize: '0.9rem', color: '#b0b0b0', marginTop: '5px'}}>
+                          <span style={{marginRight: '15px'}}>🆔 ID: <strong>{item.studentNumber}</strong></span>
+                          <span style={{marginRight: '15px'}}>📍 {item.city}</span>
+                          <span>📚 Program: <strong>{item.program}</strong></span>
+                        </div>
+                      </div>
+                      <div style={{fontSize: '1.5rem', opacity: 0.5}}>→</div>
+                    </div>
+                  </ListGroup.Item>
+                ))
+              ) : (
+                <div style={{textAlign: 'center', padding: '40px', color: '#b0b0b0'}}>
+                  No students found
+                </div>
+              )}
+            </ListGroup>
           </Container>
         </div>
       ) : (

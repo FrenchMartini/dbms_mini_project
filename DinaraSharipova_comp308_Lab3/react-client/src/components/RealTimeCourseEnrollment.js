@@ -12,12 +12,17 @@ const RealTimeCourseEnrollment = () => {
 
     useEffect(() => {
         // Initialize Socket.IO connection
-        const newSocket = io('http://localhost:5000');
+        const newSocket = io('http://localhost:5001', {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            reconnectionAttempts: 5
+        });
         setSocket(newSocket);
 
         // Socket event listeners
         newSocket.on('connect', () => {
-            console.log('Connected to server');
+            console.log('Connected to server on port 5001');
             setIsConnected(true);
         });
 
@@ -55,7 +60,7 @@ const RealTimeCourseEnrollment = () => {
 
     const fetchCourses = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/enrollment/available-courses');
+            const response = await axios.get('http://localhost:5001/api/enrollment/available-courses');
             setCourses(response.data);
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -83,13 +88,15 @@ const RealTimeCourseEnrollment = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/enrollment/enroll', {
+            const response = await axios.post('http://localhost:5001/api/enrollment/enroll', {
                 courseCode: selectedCourse,
-                studentNumber: parseInt(studentNumber)
+                studentNumber: studentNumber
             });
 
             if (response.data.message) {
                 setEnrollmentMessage(response.data.message);
+                // Refresh courses after successful enrollment
+                setTimeout(() => fetchCourses(), 500);
             }
         } catch (error) {
             console.error('Enrollment error:', error);
@@ -104,13 +111,15 @@ const RealTimeCourseEnrollment = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/enrollment/drop', {
+            const response = await axios.post('http://localhost:5001/api/enrollment/drop', {
                 courseCode: selectedCourse,
-                studentNumber: parseInt(studentNumber)
+                studentNumber: studentNumber
             });
 
             if (response.data.message) {
                 setEnrollmentMessage(response.data.message);
+                // Refresh courses after successful drop
+                setTimeout(() => fetchCourses(), 500);
             }
         } catch (error) {
             console.error('Drop error:', error);

@@ -1,6 +1,68 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🎓 Academic Hub - Management System
 
-## Available Scripts
+> A professional React-based academic management system with a modern glossy dark UI theme.
+
+## ✨ Features
+
+### 🎨 Professional Dark Theme
+- Glossy gradient backgrounds
+- Smooth animations and transitions
+- Artistic floating elements
+- High contrast readable text
+- Fully responsive design
+- WCAG AA accessibility compliant
+
+### 🧠 Smart Management
+- Student enrollment tracking
+- Course management
+- Real-time enrollment updates
+- GraphQL API support
+- Analytics dashboard
+- Advanced filtering and search
+
+### 📱 Responsive Design
+- Desktop optimized layouts
+- Tablet friendly interface
+- Mobile responsive views
+- Touch-friendly controls
+- Fast load times
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 12+ (tested with 22.20.0)
+- npm 6+
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+```
+
+The app will open at `http://localhost:3000`
+
+### Build for Production
+
+```bash
+# Create optimized build
+npm run build
+```
+
+## 📚 Documentation
+
+### Design & Styling
+- **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** - Visual reference card & color swatches (START HERE!)
+- **[UI_DESIGN_GUIDE.md](./UI_DESIGN_GUIDE.md)** - Complete design system documentation
+- **[CSS_SNIPPETS_REFERENCE.css](./CSS_SNIPPETS_REFERENCE.css)** - Reusable CSS patterns
+- **[THEME_IMPLEMENTATION.md](./THEME_IMPLEMENTATION.md)** - Theme setup & usage guide
+- **[SETUP_VERIFICATION.md](./SETUP_VERIFICATION.md)** - Installation checklist
+- **[PROJECT_COMPLETE.md](./PROJECT_COMPLETE.md)** - Project completion summary
+
+## 🎯 Available Scripts
 
 In the project directory, you can run:
 
