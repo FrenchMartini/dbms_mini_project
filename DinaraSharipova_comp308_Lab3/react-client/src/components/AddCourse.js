@@ -25,7 +25,7 @@ function AddCourse(props) {
 
   ];
     
-    const apiUrl = "http://localhost:3000/courses"
+    const apiUrl = "http://localhost:5000/courses"
     
     const addCourse = (e) => {
          validateform()

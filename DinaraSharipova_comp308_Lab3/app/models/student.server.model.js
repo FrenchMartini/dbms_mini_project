@@ -55,7 +55,29 @@ var StudentSchema = new Schema({
 		type: String,
 		max:15,
 		required: 'Phone Number is required'
-
+	},
+	enrolledCourses: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Course'
+	}],
+	academicYear: {
+		type: String,
+		enum: ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'],
+		default: 'Freshman'
+	},
+	gpa: {
+		type: Number,
+		min: 0,
+		max: 4.0,
+		default: 0
+	},
+	totalCredits: {
+		type: Number,
+		default: 0
+	},
+	isActive: {
+		type: Boolean,
+		default: true
 	}
 });
 
@@ -83,12 +105,69 @@ StudentSchema.methods.authenticate = function(password) {
 	return this.password === bcrypt.hashSync(password, saltRounds);
 };
 
+// Instance method to check if student is enrolled in a course
+StudentSchema.methods.isEnrolledInCourse = function(courseId) {
+	return this.enrolledCourses.includes(courseId);
+};
+
+// Instance method to enroll in a course
+StudentSchema.methods.enrollInCourse = function(courseId) {
+	if (!this.isEnrolledInCourse(courseId)) {
+		this.enrolledCourses.push(courseId);
+		return true;
+	}
+	return false;
+};
+
+// Instance method to drop a course
+StudentSchema.methods.dropCourse = function(courseId) {
+	const index = this.enrolledCourses.indexOf(courseId);
+	if (index > -1) {
+		this.enrolledCourses.splice(index, 1);
+		return true;
+	}
+	return false;
+};
+
+// Instance method to get total enrolled credits
+StudentSchema.methods.getTotalCredits = function() {
+	return this.enrolledCourses.reduce((total, course) => {
+		return total + (course.credits || 0);
+	}, 0);
+};
+
+// Static method to find students by academic year
+StudentSchema.statics.findByAcademicYear = function(year) {
+	return this.find({ academicYear: year, isActive: true });
+};
+
+// Static method to get student statistics
+StudentSchema.statics.getStudentStats = function() {
+	return this.aggregate([
+		{
+			$group: {
+				_id: '$academicYear',
+				count: { $sum: 1 },
+				averageGPA: { $avg: '$gpa' },
+				averageCredits: { $avg: '$totalCredits' }
+			}
+		}
+	]);
+};
+
 
 // Configure the 'UserSchema' to use getters and virtuals when transforming to JSON
 StudentSchema.set('toJSON', {
 	getters: true,
 	virtuals: true
 });
+
+// Indexes for better performance
+StudentSchema.index({ studentNumber: 1 });
+StudentSchema.index({ email: 1 });
+StudentSchema.index({ enrolledCourses: 1 });
+StudentSchema.index({ academicYear: 1 });
+StudentSchema.index({ isActive: 1 });
 
 // Create the 'User' model out of the 'UserSchema'
 mongoose.model('Student', StudentSchema);

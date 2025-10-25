@@ -23,6 +23,9 @@ import CoursesOfStudent from './components/CoursesOfStudent';
 import UpdateStudent from './components/UpdateStudent'; 
 
 import UpdateCourse from './components/UpdateCourse';
+import RealTimeCourseEnrollment from './components/RealTimeCourseEnrollment';
+import GraphQLClient from './components/GraphQLClient';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 
 
 function App(props) {
@@ -35,6 +38,9 @@ function App(props) {
           <Nav.Link href="/login">Home</Nav.Link>
           <Nav.Link href="/listOfStudents">List of All Students</Nav.Link>
           <Nav.Link href="/listOfCourses">List of All Courses</Nav.Link>
+          <Nav.Link href="/realTimeEnrollment">Real-Time Enrollment</Nav.Link>
+          <Nav.Link href="/graphql">GraphQL Client</Nav.Link>
+          <Nav.Link href="/analytics">Analytics Dashboard</Nav.Link>
         </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -53,6 +59,9 @@ function App(props) {
         <Route render ={()=> < ShowStudent />} path="/showStudent" />
         <Route render ={()=> < ShowCourse />} path="/showCourse/:courseId" />
         <Route render ={()=> < UpdateCourse />} path="/updateCourse/:courseId" />
+        <Route render ={()=> < RealTimeCourseEnrollment />} path="/realTimeEnrollment" />
+        <Route render ={()=> < GraphQLClient />} path="/graphql" />
+        <Route render ={()=> < AnalyticsDashboard />} path="/analytics" />
       </div>
     </Router>
   );

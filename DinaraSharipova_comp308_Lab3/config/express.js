@@ -9,13 +9,30 @@ var config = require('./config'),
     methodOverride = require('method-override'),
     session = require('express-session');
     const cookieParser = require('cookie-parser');
-    const cors = require('cors')
+    const cors = require('cors');
+    const { ApolloServer } = require('apollo-server-express');
 
     
 // Create a new Express application instance
-module.exports = function () {
+module.exports = async function () {
     //Create the Express application object
     var app = express();
+    
+    // Create Apollo Server
+    // IMPORTANT: Require GraphQL schema here (after Mongoose models are registered)
+    const { typeDefs, resolvers } = require('../app/graphql/schema');
+    const server = new ApolloServer({
+        typeDefs,
+        resolvers,
+        context: ({ req }) => ({
+            req
+        }),
+        introspection: true,
+        playground: true
+    });
+    
+    await server.start();
+    server.applyMiddleware({ app, path: '/graphql' });
     //the process.env property allows you to access predefined environment variables 
     //such as NODE_ENV
     // Use the 'NDOE_ENV' variable to activate the 'morgan' logger or 'compress' middleware
@@ -60,6 +77,7 @@ module.exports = function () {
     require('../app/routes/index.server.routes.js')(app);
     require('../app/routes/student.server.routes.js')(app);
     require('../app/routes/course.server.routes.js')(app);
+    require('../app/routes/enrollment.server.routes.js')(app);
     //The express.static() middleware takes one argument 
     //to determine the location of the static folder
     //Configure static file serving

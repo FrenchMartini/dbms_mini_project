@@ -15,7 +15,7 @@ function App(props) {
   //store input field data, user name and password
   const [studentNumber, setUsername] = useState();
   const [password, setPassword] = useState();
-  const apiUrl = "http://localhost:3000/signin";
+  const apiUrl = "http://localhost:5001/signin";
   //send studentNumber and password to the server
   // for initial authentication
   const auth = async () => {
@@ -49,7 +49,7 @@ function App(props) {
       console.log('--- in readCookie function ---');
 
       //
-      const res = await axios.get('/read_cookie');
+      const res = await axios.get('http://localhost:5001/read_cookie');
       // 
       if (res.data.screen !== undefined) {
         setScreen(res.data.screen);

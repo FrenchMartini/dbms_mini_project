@@ -10,7 +10,7 @@ function CreateUser(props) {
   const [student, setStudent] = useState({ _id: '', firstName: '', lastName: '', 
                 email: '',studentNumber: '',password: '' ,address:'',city:'',phone:'',program:''});
   const [showLoading, setShowLoading] = useState(false);
-  const apiUrl = "http://localhost:3000/";
+  const apiUrl = "http://localhost:5001/";
 
   const saveUser = (e) => {
     setShowLoading(true);

@@ -26,7 +26,7 @@ function UpdateCourse(props) {
 
   ];
     //
-    const apiUrl = "http://localhost:3000/courses/"+ id;
+    const apiUrl = "http://localhost:5000/courses/"+ id;
   
     //
     //runs only once after the first render
