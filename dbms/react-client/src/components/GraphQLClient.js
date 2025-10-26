@@ -107,20 +107,54 @@ const GraphQLClient = () => {
         `,
         enrollStudent: `
             mutation {
-                enrollStudent(courseCode: "COMP308", studentNumber: 123456) {
-                    success
-                    message
-                    course {
+                enrollStudent(studentNumber: "1001", courseCode: "COMP308")
+            }
+        `,
+        enrollMultipleCourses: `
+            mutation {
+                enrollMultipleCourses(
+                    studentNumber: "1001"
+                    courseCodes: ["COMP308", "COMP304", "COMP306"]
+                ) {
+                    studentNumber
+                    studentName
+                    totalEnrolled
+                    totalCredits
+                    results {
+                        success
+                        message
                         courseCode
                         courseName
                         enrollmentCount
                         capacity
+                        availableSeats
+                        status
                     }
-                    student {
-                        firstName
-                        lastName
-                        studentNumber
+                    errors
+                }
+            }
+        `,
+        enrollMultipleCoursesWithCapacityCheck: `
+            mutation {
+                enrollMultipleCourses(
+                    studentNumber: "1002"
+                    courseCodes: ["COMP308", "COMP304", "COMP306", "COMP310", "COMP312"]
+                ) {
+                    studentNumber
+                    studentName
+                    totalEnrolled
+                    totalCredits
+                    results {
+                        success
+                        message
+                        courseCode
+                        courseName
+                        enrollmentCount
+                        capacity
+                        availableSeats
+                        status
                     }
+                    errors
                 }
             }
         `,
@@ -280,13 +314,14 @@ const GraphQLClient = () => {
                             <div className="col-md-6">
                                 <h5>Mutations</h5>
                                 <ul>
-                                    <li><code>enrollStudent(courseCode: "COMP308", studentNumber: 123456)</code></li>
-                                    <li><code>dropStudent(courseCode: "COMP308", studentNumber: 123456)</code></li>
+                                    <li><code>enrollStudent(studentNumber: "1001", courseCode: "COMP308")</code></li>
+                                    <li><code>enrollMultipleCourses(studentNumber: "1001", courseCodes: ["COMP308", "COMP304", "COMP306"])</code></li>
+                                    <li><code>dropCourse(studentNumber: "1001", courseCode: "COMP308")</code></li>
                                     <li><code>createCourse(input: {"{...}"})</code></li>
-                                    <li><code>updateCourse(courseCode: "COMP308", input: {"{...}"})</code></li>
-                                    <li><code>deleteCourse(courseCode: "COMP308")</code></li>
+                                    <li><code>updateCourse(id: "courseId", input: {"{...}"})</code></li>
+                                    <li><code>deleteCourse(id: "courseId")</code></li>
                                     <li><code>createStudent(input: {"{...}"})</code></li>
-                                    <li><code>updateStudent(studentNumber: 123456, input: {"{...}"})</code></li>
+                                    <li><code>updateStudent(id: "studentId", input: {"{...}"})</code></li>
                                 </ul>
                             </div>
                         </div>

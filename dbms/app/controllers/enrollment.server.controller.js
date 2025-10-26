@@ -24,35 +24,40 @@ exports.enrollStudent = function(req, res) {
     ])
     .then(([course, student]) => {
         if (!course) {
-            return res.status(404).json({ message: 'Course not found' });
+            res.status(404).json({ message: 'Course not found' });
+            return Promise.reject({ handled: true }); // Signal that response was sent
         }
         if (!student) {
-            return res.status(404).json({ message: 'Student not found' });
+            res.status(404).json({ message: 'Student not found' });
+            return Promise.reject({ handled: true });
         }
 
         // Check if course is full
         if (course.enrolledStudents.length >= course.capacity) {
-            return res.status(400).json({ 
+            res.status(400).json({ 
                 message: 'Course is full', 
                 availableSeats: 0,
                 enrollmentCount: course.enrolledStudents.length,
                 capacity: course.capacity
             });
+            return Promise.reject({ handled: true });
         }
 
         // Check if student is already enrolled
         if (course.isStudentEnrolled(student._id)) {
-            return res.status(400).json({ message: 'Student is already enrolled in this course' });
+            res.status(400).json({ message: 'Student is already enrolled in this course' });
+            return Promise.reject({ handled: true });
         }
 
         // Check if student has reached maximum credits (optional limit)
         const maxCredits = 18; // Maximum credits per semester
         if (student.totalCredits + course.credits > maxCredits) {
-            return res.status(400).json({ 
+            res.status(400).json({ 
                 message: `Student cannot enroll. Would exceed maximum credits (${maxCredits})`,
                 currentCredits: student.totalCredits,
                 courseCredits: course.credits
             });
+            return Promise.reject({ handled: true });
         }
 
         // Enroll student
@@ -64,6 +69,9 @@ exports.enrollStudent = function(req, res) {
         return Promise.all([course.save(), student.save()]);
     })
     .then(async (saved) => {
+        // Only execute if we didn't reject earlier
+        if (!saved) return;
+        
         // Re-fetch the course and student to get updated data
         const course = await Course.findOne({ courseCode: req.body.courseCode });
         const student = await Student.findOne({ studentNumber: req.body.studentNumber });
@@ -95,6 +103,11 @@ exports.enrollStudent = function(req, res) {
         });
     })
     .catch(err => {
+        // Don't send response if we already handled it
+        if (err && err.handled) {
+            return;
+        }
+        
         console.error('Enrollment error:', err);
         if (!res.headersSent) {
             res.status(500).json({ message: getErrorMessage(err) });
@@ -113,15 +126,18 @@ exports.dropStudent = function(req, res) {
     ])
     .then(([course, student]) => {
         if (!course) {
-            return res.status(404).json({ message: 'Course not found' });
+            res.status(404).json({ message: 'Course not found' });
+            return Promise.reject({ handled: true });
         }
         if (!student) {
-            return res.status(404).json({ message: 'Student not found' });
+            res.status(404).json({ message: 'Student not found' });
+            return Promise.reject({ handled: true });
         }
 
         // Check if student is enrolled
         if (!course.isStudentEnrolled(student._id)) {
-            return res.status(400).json({ message: 'Student is not enrolled in this course' });
+            res.status(400).json({ message: 'Student is not enrolled in this course' });
+            return Promise.reject({ handled: true });
         }
 
         // Drop student
@@ -132,6 +148,8 @@ exports.dropStudent = function(req, res) {
         return Promise.all([course.save(), student.save()]);
     })
     .then(async (saved) => {
+        if (!saved) return;
+        
         // Re-fetch the course and student to get updated data
         const course = await Course.findOne({ courseCode: req.body.courseCode });
         const student = await Student.findOne({ studentNumber: req.body.studentNumber });
@@ -163,6 +181,10 @@ exports.dropStudent = function(req, res) {
         });
     })
     .catch(err => {
+        if (err && err.handled) {
+            return;
+        }
+        
         console.error('Drop error:', err);
         if (!res.headersSent) {
             res.status(500).json({ message: getErrorMessage(err) });

@@ -26,6 +26,7 @@ import UpdateCourse from './components/UpdateCourse';
 import RealTimeCourseEnrollment from './components/RealTimeCourseEnrollment';
 import GraphQLClient from './components/GraphQLClient';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
+import BulkEnrollment from './components/BulkEnrollment';
 
 
 function App(props) {
@@ -66,6 +67,7 @@ function App(props) {
                 <Nav.Link href="/listOfStudents" className="nav-link">All Students</Nav.Link>
                 <Nav.Link href="/listOfCourses" className="nav-link">All Courses</Nav.Link>
                 <Nav.Link href="/realTimeEnrollment" className="nav-link">Enrollment</Nav.Link>
+                <Nav.Link href="/bulk-enrollment" className="nav-link">Bulk Analytics</Nav.Link>
                 <Nav.Link href="/graphql" className="nav-link">GraphQL</Nav.Link>
                 <Nav.Link href="/analytics" className="nav-link">Analytics</Nav.Link>
               </>
@@ -85,12 +87,13 @@ function App(props) {
         <Route render ={()=> < StudentsEnrolledInCourse />} path="/StudentsEnrolledInCourse/:courseCode" />
         <Route render ={()=> < CoursesOfStudent />} path="/CoursesOfStudent/:studentId" />
         <Route render ={()=> < UpdateStudent />} path="/updateStudent/:studentNumber" />
-        <Route render ={()=> < ShowStudent />} path="/showStudent" />
+        <Route render ={(props) => < ShowStudent {...props} screen={props.match.params.studentNumber} />} path="/showStudent/:studentNumber" />
         <Route render ={()=> < ShowCourse />} path="/showCourse/:courseId" />
         <Route render ={()=> < UpdateCourse />} path="/updateCourse/:courseId" />
         <Route render ={()=> < RealTimeCourseEnrollment />} path="/realTimeEnrollment" />
         <Route render ={()=> < GraphQLClient />} path="/graphql" />
         <Route render ={()=> < AnalyticsDashboard />} path="/analytics" />
+        <Route render ={()=> < BulkEnrollment />} path="/bulk-enrollment" />
       </div>
     </Router>
   );

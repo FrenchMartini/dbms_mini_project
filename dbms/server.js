@@ -6,6 +6,9 @@
 // Set the 'NODE_ENV' variable
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
+// Import socket manager
+const socketManager = require('./socket-manager');
+
 async function startServer() {
     // Load the module dependencies
     var mongoose = require('./config/mongoose'),
@@ -30,6 +33,9 @@ var io = socketIo(server, {
     },
     transports: ['websocket', 'polling']
 });
+
+// Set Socket.IO instance in manager
+socketManager.setSocketIO(io);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {

@@ -4,27 +4,29 @@
 
 /* Global Colors & Variables */
 :root {
+  /* Clean White & Blue Theme */
   --primary-bg: #ffffff;
   --secondary-bg: #f8f9fa;
   --tertiary-bg: #e9ecef;
-  --navy-blue: #2c3e50;
-  --navy-light: #34495e;
-  --navy-dark: #1a252f;
-  --accent-blue: #3498db;
-  --accent-light: #2980b9;
+  --navy-blue: #1e3a5f;
+  --navy-light: #3b6ba5;
+  --navy-dark: #0d1f33;
+  --accent-blue: #0066cc;
+  --accent-light: #4d9de0;
+  --accent-softer: #e6f2ff;
   --text-dark: #2c3e50;
   --text-light: #ffffff;
   --text-muted: #7f8c8d;
   --card-bg: #ffffff;
-  --input-bg: #ffffff;
-  --border-color: #bdc3c7;
-  --success: #27ae60;
-  --danger: #e74c3c;
-  --warning: #f39c12;
-  --info: #3498db;
-  --shadow-light: rgba(44, 62, 80, 0.1);
-  --shadow-medium: rgba(44, 62, 80, 0.15);
-  --shadow-strong: rgba(44, 62, 80, 0.25);
+  --input-bg: #f8f9fa;
+  --border-color: #dee2e6;
+  --success: #28a745;
+  --danger: #dc3545;
+  --warning: #ffc107;
+  --info: #17a2b8;
+  --shadow-light: rgba(30, 58, 95, 0.08);
+  --shadow-medium: rgba(30, 58, 95, 0.12);
+  --shadow-strong: rgba(30, 58, 95, 0.2);
 }
 
 /* ============================================
@@ -98,12 +100,13 @@
 body {
   background: linear-gradient(135deg, var(--secondary-bg) 0%, #ffffff 100%);
   color: var(--text-dark);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
 }
 
 /* Override for login page */
 body:has(.LoginWrapper) {
-  background: linear-gradient(135deg, var(--navy-blue) 0%, var(--navy-light) 100%);
+  background: linear-gradient(135deg, #003d82 0%, #0056b3 50%, #007fff 100%);
 }
 
 /* ============================================

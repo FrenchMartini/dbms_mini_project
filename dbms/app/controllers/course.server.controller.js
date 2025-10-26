@@ -44,6 +44,21 @@ exports.delete = function(req, res) {
     });
 };
 
+exports.readById = function(req, res) {
+    const mongoose = require('mongoose');
+    if (!mongoose.Types.ObjectId.isValid(req.params.courseId)) {
+        return res.status(400).json({ message: 'Invalid course ID' });
+    }
+    
+    Course.findById(req.params.courseId)
+        .populate('enrolledStudents', 'firstName lastName studentNumber email')
+        .exec((err, course) => {
+            if (err) return res.status(400).json({ message: getErrorMessage(err) });
+            if (!course) return res.status(404).json({ message: 'Course not found' });
+            res.status(200).json(course);
+        });
+};
+
 exports.courseByCode = function(req, res, next, id) {
     Course.findOne({ courseCode: id }).populate('enrolledStudents').exec((err, course) => {
         if (err) return next(err);
