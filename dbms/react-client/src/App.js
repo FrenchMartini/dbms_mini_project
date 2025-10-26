@@ -56,7 +56,7 @@ function App(props) {
   return (
     <Router>
       <Navbar bg="dark" expand="lg" className="navbar">
-        <Navbar.Brand href="/login">📚 Academic Hub</Navbar.Brand>
+        <Navbar.Brand href="/login">Academic Hub</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">

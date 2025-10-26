@@ -49,8 +49,8 @@ function ShowCourse(props) {
       </Spinner> }    
       <div class="header">
           <div class="mask">
-          <div class="d-flex justify-content-center align-items-center h-200">
-            <div class="text-white margin-class">Course Details: {data.courseName}</div></div></div></div>
+          <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>Course Details: {data.courseName}</div></div></div></div>
       <Jumbotron>
         <div class="text-center wrapperCourseInfo">
       <h3>Course Name: <span>{data.courseName}</span></h3>

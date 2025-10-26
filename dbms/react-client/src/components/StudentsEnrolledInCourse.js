@@ -50,8 +50,8 @@ function List(props) {
           )}
           <div class="header">
       <div class="mask">
-      <div class="d-flex justify-content-center align-items-center h-200">
-        <div class="text-white margin-class">Students Enrolled in {props.match.params.courseCode}</div>
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>Students Enrolled in {props.match.params.courseCode}</div>
         </div></div></div>
           <Container>
           <ListGroup className="text-center wrapperList">

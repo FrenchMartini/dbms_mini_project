@@ -20,10 +20,10 @@ function AdminDashboard(props) {
       <div>
         <div className="header">
           <div className="mask">
-            <div className="d-flex justify-content-center align-items-center h-200">
-              <div className="text-white margin-class">
-                <h2 className="mb-3">Welcome to Admin Panel</h2>
-                <p className="mb-3">Logged in as: {screen}</p>
+            <div className="d-flex justify-content-center align-items-center h-100">
+              <div className="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>
+                <h2 className="mb-2" style={{fontSize: '1.6rem'}}>Welcome to Admin Panel</h2>
+                <p className="mb-0" style={{fontSize: '1rem'}}>Logged in as: {screen}</p>
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@ function AdminDashboard(props) {
           <div className="col-md-4 mb-4">
             <Card>
               <Card.Body className="text-center">
-                <h3>📊 Analytics</h3>
+                <h3>Analytics</h3>
                 <p>View enrollment statistics and analytics</p>
                 <Button variant="primary" href="/analytics" className="w-100">
                   View Analytics
@@ -47,7 +47,7 @@ function AdminDashboard(props) {
           <div className="col-md-4 mb-4">
             <Card>
               <Card.Body className="text-center">
-                <h3>👥 All Students</h3>
+                <h3>All Students</h3>
                 <p>Manage and view all registered students</p>
                 <Button variant="primary" href="/listOfStudents" className="w-100">
                   View Students
@@ -59,7 +59,7 @@ function AdminDashboard(props) {
           <div className="col-md-4 mb-4">
             <Card>
               <Card.Body className="text-center">
-                <h3>📚 All Courses</h3>
+                <h3>All Courses</h3>
                 <p>Manage and view all available courses</p>
                 <Button variant="primary" href="/listOfCourses" className="w-100">
                   View Courses
@@ -83,7 +83,7 @@ function AdminDashboard(props) {
           <div className="col-md-4 mb-4">
             <Card>
               <Card.Body className="text-center">
-                <h3>🔄 Real-Time Enrollment</h3>
+                <h3>Real-Time Enrollment</h3>
                 <p>Monitor real-time course enrollment</p>
                 <Button variant="info" href="/realTimeEnrollment" className="w-100">
                   Real-Time View
@@ -95,7 +95,7 @@ function AdminDashboard(props) {
           <div className="col-md-4 mb-4">
             <Card>
               <Card.Body className="text-center">
-                <h3>🔍 GraphQL</h3>
+                <h3>GraphQL</h3>
                 <p>Access GraphQL playground</p>
                 <Button variant="warning" href="/graphql" className="w-100">
                   GraphQL Client

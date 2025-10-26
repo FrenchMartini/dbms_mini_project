@@ -87,8 +87,8 @@ function UpdateCourse(props) {
         <div>
         <div class="header">
         <div class="mask">
-        <div class="d-flex justify-content-center align-items-center h-200">
-          <div class="text-white margin-class"> Edit A Course </div></div></div></div>
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}> Edit A Course </div></div></div></div>
         {showLoading && 
             <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>

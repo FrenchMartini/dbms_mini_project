@@ -107,53 +107,67 @@ function App(props) {
   
   //
   return (
-    <div className="App container">
+    <div className="App">
       {screen === 'auth' 
-        ? <div className="col-md-6 offset-md-3 LoginWrapper fade-in">
-            <div className="card shadow" style={{maxWidth: '500px'}}>
-              <div className="card-body">
-                <h2 className="card-title text-center mb-4">🎓 Welcome Back</h2>
-                <p className="text-center text-muted mb-4">Academic Hub Management System</p>
-                
-                {error && (
-                  <div className="alert alert-danger mb-4">
-                    ⚠️ {error}
+        ? <div className="login-split-container fade-in">
+            {/* Left Side - Login Form */}
+            <div className="login-form-section">
+              <div className="login-form-overlay">
+              </div>
+              <div className="login-form-container">
+                <div className="login-form-branding">
+                  <h1>Student Management System</h1>
+                </div>
+                <div className="card">
+                  <div className="card-body">
+                    <h2 className="card-title text-center mb-2">Welcome Back</h2>
+                    <p className="text-center text-muted mb-4">Please sign in to your account</p>
+                    
+                    {error && (
+                      <div className="alert alert-danger mb-4">
+                        ⚠️ {error}
+                      </div>
+                    )}
+
+                    <Form.Group className="mb-4">
+                      <Form.Label>Student Number</Form.Label>
+                      <Form.Control 
+                        type="text" 
+                        placeholder="Enter your student number"
+                        onChange={e => setUsername(e.target.value)} 
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-4">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control 
+                        type="password" 
+                        placeholder="Enter your password"
+                        onChange={e => setPassword(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Button 
+                      className="w-100 mb-3" 
+                      variant="primary" 
+                      onClick={auth}
+                      style={{fontWeight: '600', padding: '14px'}}
+                    >
+                      Login
+                    </Button>
+
+                    <div className="text-center">
+                      <p className="note_para" style={{marginBottom: 0}}>
+                        Don't have an account? <a href="/create" style={{color: '#007bff'}}>Register here</a>
+                      </p>
+                    </div>
                   </div>
-                )}
-
-                <Form.Group className="mb-4">
-                  <Form.Label>Student Number</Form.Label>
-                  <Form.Control 
-                    type="text" 
-                    placeholder="Enter your student number"
-                    onChange={e => setUsername(e.target.value)} 
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control 
-                    type="password" 
-                    placeholder="Enter your password"
-                    onChange={e => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Button 
-                  className="w-100 mb-3" 
-                  variant="primary" 
-                  onClick={auth}
-                  style={{fontWeight: '600', padding: '12px'}}
-                >
-                  🔐 Login
-                </Button>
-
-                <div className="text-center">
-                  <p className="note_para" style={{marginBottom: 0}}>
-                    Don't have an account? <a href="/create" style={{color: '#a29bfe'}}>Register here</a>
-                  </p>
                 </div>
               </div>
+            </div>
+            
+            {/* Right Side - NIT Building Image */}
+            <div className="login-image-section">
             </div>
           </div>
         : <View screen={screen} setScreen={setScreen} student={student} setStudent={setStudent} />
