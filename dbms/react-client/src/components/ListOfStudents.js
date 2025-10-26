@@ -64,7 +64,7 @@ function ListOfStudents(props) {
           <div className="header">
             <div className="mask">
               <div style={{textAlign: 'center'}}>
-                <h1 style={{fontSize: '3rem', marginBottom: '1rem'}}>👥 All Students</h1>
+                <h1 style={{fontSize: '3rem', marginBottom: '1rem'}}>All Students</h1>
                 <p style={{fontSize: '1.1rem', color: '#a29bfe'}}>Comprehensive student directory</p>
               </div>
             </div>
@@ -86,10 +86,10 @@ function ListOfStudents(props) {
                           {item.firstName} {item.lastName}
                         </div>
                         <div style={{fontSize: '0.9rem', color: '#b0b0b0', marginTop: '5px'}}>
-                          <span style={{marginRight: '15px'}}>🆔 ID: <strong>{item.studentNumber}</strong></span>
-                          <span style={{marginRight: '15px'}}>📍 {item.city}</span>
-                          <span>📚 Program: <strong>{item.program}</strong></span>
-                          <span style={{marginLeft: '15px'}}>💼 Total Credits: <strong>{item.totalCredits || 0}</strong></span>
+                          <span style={{marginRight: '15px'}}>ID: <strong>{item.studentNumber}</strong></span>
+                          <span style={{marginRight: '15px'}}>{item.city}</span>
+                          <span>Program: <strong>{item.program}</strong></span>
+                          <span style={{marginLeft: '15px'}}>Total Credits: <strong>{item.totalCredits || 0}</strong></span>
                         </div>
                       </div>
                       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>

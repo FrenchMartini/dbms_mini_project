@@ -130,8 +130,8 @@ function StudentEnrollment(props) {
         <div>
             <div className="header">
                 <div className="mask">
-                    <div className="d-flex justify-content-center align-items-center h-200">
-                        <div className="text-white margin-class">
+                    <div className="d-flex justify-content-center align-items-center h-100">
+                        <div className="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>
                             Enroll in Courses - Student: {studentNumber}
                         </div>
                     </div>
@@ -159,7 +159,7 @@ function StudentEnrollment(props) {
                             <Card.Header>
                                 <h5>Available Courses</h5>
                                 <Button variant="link" size="sm" onClick={fetchCourses} disabled={refreshing}>
-                                    {refreshing ? 'Refreshing...' : '🔄 Refresh'}
+                                    {refreshing ? 'Refreshing...' : 'Refresh'}
                                 </Button>
                             </Card.Header>
                             <Card.Body>

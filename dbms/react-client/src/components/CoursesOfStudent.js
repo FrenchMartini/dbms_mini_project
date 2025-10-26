@@ -47,23 +47,79 @@ function List(props) {
           {showLoading && <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>
           </Spinner> }
-          <div>
-          <div class="header">
-          <div class="mask">
-          <div class="d-flex justify-content-center align-items-center h-200">
-            <div class="text-white margin-class">List of Courses Taken by You</div></div></div></div>
+          
+          <div className="header">
+            <div className="mask">
+              <div className="d-flex justify-content-between align-items-center h-100" style={{padding: '0 2rem'}}>
+                <Button variant="link" className="text-light" onClick={() => window.history.back()} style={{fontSize: '1rem', textDecoration: 'none'}}>
+                  <i className="fas fa-arrow-left me-2"></i> Back
+                </Button>
+                <div className="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>My Courses</div>
+                <div style={{width: '80px'}}></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="container mt-4">
+            <div className="row">
+              {data.enrolledCourses.map((item, idx) => (
+                <div className="col-md-6 col-lg-4 mb-4" key={idx}>
+                  <div className="card course-card" onClick={() => { showDetail(item._id) }} 
+                       style={{cursor: 'pointer', transition: 'all 0.3s ease', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.1)'}}>
+                    <div className="card-header" style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', borderRadius: '0.5rem 0.5rem 0 0'}}>
+                      <h5 className="card-title mb-0" style={{fontSize: '1.1rem', fontWeight: '600'}}>
+                        <i className="fas fa-book me-2"></i>
+                        {item.courseCode}
+                      </h5>
+                    </div>
+                    <div className="card-body" style={{padding: '1.5rem'}}>
+                      <h6 className="course-name mb-3" style={{color: '#2c3e50', fontWeight: '600', fontSize: '1rem'}}>
+                        {item.courseName}
+                      </h6>
+                      <div className="course-details">
+                        <div className="d-flex align-items-center mb-2">
+                          <i className="fas fa-users me-2" style={{color: '#3498db', width: '16px'}}></i>
+                          <small style={{color: '#666'}}>Section: <strong>{item.section}</strong></small>
+                        </div>
+                        {item.credits && (
+                          <div className="d-flex align-items-center mb-2">
+                            <i className="fas fa-credit-card me-2" style={{color: '#e74c3c', width: '16px'}}></i>
+                            <small style={{color: '#666'}}>Credits: <strong>{item.credits}</strong></small>
+                          </div>
+                        )}
+                        {item.instructor && (
+                          <div className="d-flex align-items-center">
+                            <i className="fas fa-chalkboard-teacher me-2" style={{color: '#f39c12', width: '16px'}}></i>
+                            <small style={{color: '#666'}}>Instructor: <strong>{item.instructor}</strong></small>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="card-footer" style={{background: '#f8f9fa', border: 'none', padding: '0.75rem 1.5rem'}}>
+                      <small className="text-muted d-flex align-items-center justify-content-center">
+                        <i className="fas fa-mouse-pointer me-1"></i>
+                        Click to view details
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {data.enrolledCourses.length === 0 && (
+                <div className="col-12 text-center mt-5">
+                  <div className="empty-state" style={{padding: '3rem', color: '#6c757d'}}>
+                    <i className="fas fa-graduation-cap" style={{fontSize: '3rem', marginBottom: '1rem', opacity: '0.5'}}></i>
+                    <h5>No Courses Enrolled</h5>
+                    <p>You haven't enrolled in any courses yet.</p>
+                    <Button variant="primary" href="/enroll" className="mt-3">
+                      <i className="fas fa-plus me-2"></i>Enroll in Courses
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-       
-          <ListGroup className="text-center wrapperList">
-            {data.enrolledCourses.map((item, idx) => (
-              <ListGroup.Item key={idx} action onClick={() => { showDetail(item._id) }}>
-                {item.courseName+" ("+item.courseCode+")"+"  Section:  "+item.section}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-          <Button className="mt-2 btn-secondary" href="/login">Go Back</Button>
-        </div>
-        : < Login />
+        : <Login />
       }
     </div>
 

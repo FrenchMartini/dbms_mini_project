@@ -82,8 +82,8 @@ function AddCourse(props) {
         <div>
         <div class="header">
         <div class="mask">
-        <div class="d-flex justify-content-center align-items-center h-200">
-          <div class="text-white margin-class">
+        <div class="d-flex justify-content-center align-items-center h-100">
+          <div class="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>
            Add a Course for Student with StudentID: {studentNumber} </div></div></div></div>
         {showLoading && 
             <Spinner animation="border" role="status">

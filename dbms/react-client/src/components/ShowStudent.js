@@ -61,8 +61,8 @@ function ShowUser(props) {
       )}
       <div class="header">
       <div class="mask">
-      <div class="d-flex justify-content-center align-items-center h-200">
-        <div class="text-white margin-class">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="text-white" style={{fontSize: '1.4rem', fontWeight: '600', textAlign: 'center'}}>
           Profile: {data.firstName} {data.lastName}
           </div> </div> </div> </div>
       <Card>
