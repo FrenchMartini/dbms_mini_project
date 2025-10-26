@@ -17,31 +17,21 @@ const AnalyticsDashboard = () => {
             setLoading(true);
             
             // Fetch enrollment statistics
-            const enrollmentResponse = await axios.get('http://localhost:5000/api/enrollment/enrollment-stats');
+            const enrollmentResponse = await axios.get('http://localhost:5001/api/enrollment/enrollment-stats');
             setEnrollmentStats(enrollmentResponse.data);
 
-            // Fetch student statistics
-            const studentResponse = await axios.post('http://localhost:5000/graphql', {
-                query: `
-                    query {
-                        studentStats {
-                            academicYear
-                            count
-                            averageGPA
-                            averageCredits
-                        }
-                    }
-                `
-            });
-            setStudentStats(studentResponse.data.data.studentStats);
-
             // Fetch courses with enrollment data
-            const coursesResponse = await axios.get('http://localhost:5000/api/enrollment/available-courses');
-            setCourses(coursesResponse.data);
+            const coursesResponse = await axios.get('http://localhost:5001/api/enrollment/available-courses');
+            setCourses(Array.isArray(coursesResponse.data) ? coursesResponse.data : []);
+
+            // For now, we'll skip the GraphQL student stats query since it's not implemented
+            // You can implement this later if needed
+            setStudentStats([]);
 
         } catch (err) {
-            setError('Failed to fetch analytics data');
-            console.error('Analytics error:', err);
+            console.error('Analytics error details:', err);
+            const errorMessage = err.response?.data?.message || err.message || 'Failed to fetch analytics data';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -122,36 +112,32 @@ const AnalyticsDashboard = () => {
                 </div>
             )}
 
-            {/* Student Statistics by Academic Year */}
+            {/* Course Status Breakdown */}
             <div className="row mb-4">
                 <div className="col-md-6">
                     <div className="card">
                         <div className="card-header">
-                            <h5>Student Statistics by Academic Year</h5>
+                            <h5>Enrollment Overview</h5>
                         </div>
                         <div className="card-body">
-                            <div className="table-responsive">
-                                <table className="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Academic Year</th>
-                                            <th>Count</th>
-                                            <th>Avg GPA</th>
-                                            <th>Avg Credits</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {studentStats.map((stat, index) => (
-                                            <tr key={index}>
-                                                <td>{stat.academicYear}</td>
-                                                <td>{stat.count}</td>
-                                                <td>{stat.averageGPA?.toFixed(2) || 'N/A'}</td>
-                                                <td>{stat.averageCredits?.toFixed(1) || 'N/A'}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                            {courses.length > 0 ? (
+                                <div className="row text-center">
+                                    <div className="col-md-4">
+                                        <h3>{courses.filter(c => c.status === 'Full').length}</h3>
+                                        <small className="text-muted">Full Courses</small>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h3>{courses.filter(c => c.status === 'Almost Full').length}</h3>
+                                        <small className="text-muted">Almost Full</small>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h3>{courses.filter(c => c.status === 'Available').length}</h3>
+                                        <small className="text-muted">Available</small>
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-muted">No courses data available</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -299,13 +285,13 @@ const AnalyticsDashboard = () => {
                         </div>
                         <div className="card-body">
                             <div className="list-group">
-                                {courses
+                                {Object.entries(courses
                                     .reduce((acc, course) => {
                                         const credits = course.credits;
                                         acc[credits] = (acc[credits] || 0) + 1;
                                         return acc;
-                                    }, {})
-                                    .map((count, credits) => (
+                                    }, {}))
+                                    .map(([credits, count]) => (
                                         <div key={credits} className="list-group-item d-flex justify-content-between align-items-center">
                                             <span>{credits} Credits</span>
                                             <span className="badge bg-secondary rounded-pill">{count} courses</span>

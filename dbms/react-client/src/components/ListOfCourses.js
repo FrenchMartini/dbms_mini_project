@@ -12,7 +12,7 @@ function List(props) {
   const [data, setData] = useState([]);
   const [showLoading, setShowLoading] = useState(true);
   const [listError, setListError] = useState(false);
-  const apiUrl = "http://localhost:5000/students";
+  const apiUrl = "http://localhost:5001/students";
   const courseCode_List = [
     {value: 'ENGL101', name: 'English Basics', label:'ENGL101: English Basics'},
       {value: 'BSN101', name: 'Business Basics', label:'BSN101: Business Basics'},

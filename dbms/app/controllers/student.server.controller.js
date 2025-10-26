@@ -39,7 +39,9 @@ exports.create = function (req, res, next) {
 };
 // LIST ALL STUDENTS
 exports.list = function (req, res, next) {
-    Student.find({}, function (err, students) {
+    Student.find({})
+        .populate('enrolledCourses', 'courseCode courseName credits instructor schedule')
+        .exec(function (err, students) {
         if (err) {
             return next(err);
         } else {
@@ -108,13 +110,21 @@ exports.authenticate = function(req, res, next) {
 			if(student != null){
 				if(bcrypt.compareSync(password, student.password)) {
 				
-					const token = jwt.sign({ id: student._id, studentNumber: student.studentNumber }, jwtKey, 
-						{algorithm: 'HS256', expiresIn: jwtExpirySeconds });
-					console.log('token:', token)
-					
-					res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000,httpOnly: true});
-					req.student=student;
-					res.status(200).send({ screen: student.studentNumber, student: student});
+				const token = jwt.sign({ 
+					id: student._id, 
+					studentNumber: student.studentNumber, 
+					role: student.role || 'student' 
+				}, jwtKey, {algorithm: 'HS256', expiresIn: jwtExpirySeconds });
+				
+				console.log('token:', token)
+				
+				res.cookie('token', token, { maxAge: jwtExpirySeconds * 1000,httpOnly: true});
+				req.student=student;
+				res.status(200).send({ 
+					screen: student.studentNumber, 
+					student: student, 
+					role: student.role || 'student'
+				});
 				} else {
 					res.json({status:"error", message: "Invalid Student Number or password",
 					data:null});

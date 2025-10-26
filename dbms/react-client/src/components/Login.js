@@ -44,9 +44,19 @@ function App(props) {
       if (res.data.screen !== undefined && res.data.screen !== null && res.data.screen !== '') {
         console.log('Setting screen to:', res.data.screen);
         console.log('Setting student to:', res.data.student);
+        console.log('User role:', res.data.role);
         setScreen(res.data.screen);
         setStudent(res.data.student);
-        console.log('Login successful! Screen:', res.data.screen);
+        
+        // Store user role in localStorage
+        const userRole = res.data.role || 'student';
+        localStorage.setItem('userRole', userRole);
+        console.log('Login successful! Screen:', res.data.screen, 'Role:', userRole);
+        
+        // Force page reload to update navbar
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
       } else {
         console.log('Login response missing screen or is empty');
         setError(res.data.message || 'Login failed - no screen data returned');

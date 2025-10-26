@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +29,30 @@ import AnalyticsDashboard from './components/AnalyticsDashboard';
 
 
 function App(props) {
+  const [userRole, setUserRole] = useState(null);
+  
+  useEffect(() => {
+    // Check for user role in localStorage
+    const storedRole = localStorage.getItem('userRole');
+    if (storedRole) {
+      setUserRole(storedRole);
+    }
+    
+    // Listen for storage changes (when login happens in another window/tab)
+    const handleStorageChange = () => {
+      const newRole = localStorage.getItem('userRole');
+      if (newRole !== userRole) {
+        setUserRole(newRole);
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [userRole]);
+  
   return (
     <Router>
       <Navbar bg="dark" expand="lg" className="navbar">
@@ -37,11 +61,15 @@ function App(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
             <Nav.Link href="/login" className="nav-link">Home</Nav.Link>
-            <Nav.Link href="/listOfStudents" className="nav-link">All Students</Nav.Link>
-            <Nav.Link href="/listOfCourses" className="nav-link">All Courses</Nav.Link>
-            <Nav.Link href="/realTimeEnrollment" className="nav-link">Enrollment</Nav.Link>
-            <Nav.Link href="/graphql" className="nav-link">GraphQL</Nav.Link>
-            <Nav.Link href="/analytics" className="nav-link">Analytics</Nav.Link>
+            {userRole === 'admin' && (
+              <>
+                <Nav.Link href="/listOfStudents" className="nav-link">All Students</Nav.Link>
+                <Nav.Link href="/listOfCourses" className="nav-link">All Courses</Nav.Link>
+                <Nav.Link href="/realTimeEnrollment" className="nav-link">Enrollment</Nav.Link>
+                <Nav.Link href="/graphql" className="nav-link">GraphQL</Nav.Link>
+                <Nav.Link href="/analytics" className="nav-link">Analytics</Nav.Link>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

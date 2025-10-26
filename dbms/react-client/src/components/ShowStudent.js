@@ -10,7 +10,7 @@ function ShowUser(props) {
   const studentNumber = props.screen;
   const [data, setData] = useState({});
   const [showLoading, setShowLoading] = useState(true);
-  const apiUrl = "http://localhost:5000/students/" + studentNumber;
+  const apiUrl = "http://localhost:5001/students/" + studentNumber;
 
   useEffect(() => {
     setShowLoading(false);

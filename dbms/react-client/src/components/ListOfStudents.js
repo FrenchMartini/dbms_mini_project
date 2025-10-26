@@ -5,6 +5,9 @@ import Spinner from "react-bootstrap/Spinner";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import Card from "react-bootstrap/Card";
+import Collapse from "react-bootstrap/Collapse";
+import Badge from "react-bootstrap/Badge";
 import { withRouter } from "react-router-dom";
 import Login from "./Login";
 
@@ -12,7 +15,8 @@ function ListOfStudents(props) {
   const [data, setData] = useState([]);
   const [showLoading, setShowLoading] = useState(true);
   const [listError, setListError] = useState(false);
-  const apiUrl = "http://localhost:5000/students";
+  const [expandedStudent, setExpandedStudent] = useState(null);
+  const apiUrl = "http://localhost:5001/students";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +45,10 @@ function ListOfStudents(props) {
     });
   };
 
+  const toggleExpanded = (studentNumber) => {
+    setExpandedStudent(expandedStudent === studentNumber ? null : studentNumber);
+  };
+
   return (
     <div>
       {data.length !== 0 ? (
@@ -66,18 +74,14 @@ function ListOfStudents(props) {
             <ListGroup className="wrapperList">
               {data.length > 0 ? (
                 data.map((item, idx) => (
-                  <ListGroup.Item
-                    key={idx}
-                    className="list-group-item slide-in"
-                    style={{
-                      animationDelay: `${idx * 0.05}s`,
-                      cursor: 'pointer',
-                      marginBottom: '12px'
-                    }}
-                    onClick={() => showDetail(item.studentNumber)}
-                  >
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                      <div>
+                  <div key={idx} className="list-group-item slide-in" style={{
+                    animationDelay: `${idx * 0.05}s`,
+                    marginBottom: '12px',
+                    padding: 0
+                  }}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', cursor: 'pointer'}}
+                         onClick={() => showDetail(item.studentNumber)}>
+                      <div style={{flexGrow: 1}}>
                         <div style={{fontSize: '1.1rem', fontWeight: '600', color: '#a29bfe'}}>
                           {item.firstName} {item.lastName}
                         </div>
@@ -85,11 +89,56 @@ function ListOfStudents(props) {
                           <span style={{marginRight: '15px'}}>🆔 ID: <strong>{item.studentNumber}</strong></span>
                           <span style={{marginRight: '15px'}}>📍 {item.city}</span>
                           <span>📚 Program: <strong>{item.program}</strong></span>
+                          <span style={{marginLeft: '15px'}}>💼 Total Credits: <strong>{item.totalCredits || 0}</strong></span>
                         </div>
                       </div>
-                      <div style={{fontSize: '1.5rem', opacity: 0.5}}>→</div>
+                      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                        {item.enrolledCourses && item.enrolledCourses.length > 0 && (
+                          <Badge bg="info">{item.enrolledCourses.length} Course{item.enrolledCourses.length !== 1 ? 's' : ''}</Badge>
+                        )}
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleExpanded(item.studentNumber);
+                          }}
+                        >
+                          {expandedStudent === item.studentNumber ? '▲' : '▼'}
+                        </Button>
+                        <div style={{fontSize: '1.5rem', opacity: 0.5}}>→</div>
+                      </div>
                     </div>
-                  </ListGroup.Item>
+                    <Collapse in={expandedStudent === item.studentNumber}>
+                      <div style={{padding: '0 15px 15px 15px', borderTop: '1px solid #dee2e6', marginTop: '10px'}}>
+                        {item.enrolledCourses && item.enrolledCourses.length > 0 ? (
+                          <div>
+                            <h6 style={{color: '#a29bfe', marginBottom: '10px'}}>Enrolled Courses:</h6>
+                            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '10px'}}>
+                              {item.enrolledCourses.map((course, courseIdx) => (
+                                <Card key={courseIdx} style={{marginBottom: '8px'}}>
+                                  <Card.Body style={{padding: '10px'}}>
+                                    <div style={{fontSize: '0.85rem', fontWeight: '600', color: '#6c5ce7'}}>
+                                      {course.courseCode}
+                                    </div>
+                                    <div style={{fontSize: '0.8rem', color: '#666'}}>
+                                      {course.courseName}
+                                    </div>
+                                    <div style={{fontSize: '0.75rem', color: '#999', marginTop: '5px'}}>
+                                      <span>Credits: {course.credits}</span> | 
+                                      <span> Instructor: {course.instructor}</span>
+                                    </div>
+                                  </Card.Body>
+                                </Card>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p style={{fontSize: '0.9rem', color: '#999', margin: 0}}>No enrolled courses</p>
+                        )}
+                      </div>
+                    </Collapse>
+                  </div>
                 ))
               ) : (
                 <div style={{textAlign: 'center', padding: '40px', color: '#b0b0b0'}}>

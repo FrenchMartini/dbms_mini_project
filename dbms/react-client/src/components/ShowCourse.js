@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 function ShowCourse(props) {
   const [data, setData] = useState({});
   const [showLoading, setShowLoading] = useState(true);
-  const apiUrl = "http://localhost:5000/courses/" + props.match.params.courseId;
+  const apiUrl = "http://localhost:5001/courses/" + props.match.params.courseId;
   useEffect(() => {
     setShowLoading(false);
     const fetchData = async () => {

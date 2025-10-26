@@ -31,6 +31,11 @@ const studentSchema = new Schema({
         required: true,
         set: hashPassword
     },
+    role: {
+        type: String,
+        default: 'student',
+        enum: ['student', 'admin']
+    },
     address: String,
     city: String,
     phone: String,

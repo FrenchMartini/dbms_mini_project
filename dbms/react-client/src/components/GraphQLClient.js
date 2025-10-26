@@ -157,7 +157,7 @@ const GraphQLClient = () => {
         setResult(null);
 
         try {
-            const response = await axios.post('http://localhost:5000/graphql', {
+            const response = await axios.post('http://localhost:5001/graphql', {
                 query: query
             }, {
                 headers: {
@@ -255,8 +255,8 @@ const GraphQLClient = () => {
                     <div className="mt-4">
                         <p>
                             <strong>GraphQL Playground:</strong> 
-                            <a href="http://localhost:5000/graphql" target="_blank" rel="noopener noreferrer" className="ms-2">
-                                http://localhost:5000/graphql
+                            <a href="http://localhost:5001/graphql" target="_blank" rel="noopener noreferrer" className="ms-2">
+                                http://localhost:5001/graphql
                             </a>
                         </p>
                     </div>

@@ -58,12 +58,14 @@ const courseSchema = new Schema({
 
 // Virtual property for available seats
 courseSchema.virtual('availableSeats').get(function() {
-    return this.capacity - this.enrolledStudents.length;
+    const enrolledCount = this.enrolledStudents ? this.enrolledStudents.length : 0;
+    return this.capacity - enrolledCount;
 });
 
 // Virtual property for enrollment percentage
 courseSchema.virtual('enrollmentPercentage').get(function() {
-    return Math.round((this.enrolledStudents.length / this.capacity) * 100);
+    const enrolledCount = this.enrolledStudents ? this.enrolledStudents.length : 0;
+    return Math.round((enrolledCount / this.capacity) * 100);
 });
 
 // Virtual property for course status

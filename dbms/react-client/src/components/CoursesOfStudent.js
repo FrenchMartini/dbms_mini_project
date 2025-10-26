@@ -12,7 +12,7 @@ function List(props) {
   const [data, setData] = useState([]);
   const [showLoading, setShowLoading] = useState(true);
   const [listError, setListError] = useState(false);
-  const apiUrl = "http://localhost:5000/coursesofstudent/"+studentNumber;
+  const apiUrl = "http://localhost:5001/api/enrollment/student-courses/"+studentNumber;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +42,7 @@ function List(props) {
   return (
     <div>
         
-      { data.length !== 0
+      { data.enrolledCourses && data.enrolledCourses.length !== 0
         ? <div>
           {showLoading && <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>
@@ -55,7 +55,7 @@ function List(props) {
         </div>
        
           <ListGroup className="text-center wrapperList">
-            {data.map((item, idx) => (
+            {data.enrolledCourses.map((item, idx) => (
               <ListGroup.Item key={idx} action onClick={() => { showDetail(item._id) }}>
                 {item.courseName+" ("+item.courseCode+")"+"  Section:  "+item.section}
               </ListGroup.Item>

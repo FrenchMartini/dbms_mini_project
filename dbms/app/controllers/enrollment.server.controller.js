@@ -60,14 +60,19 @@ exports.enrollStudent = function(req, res) {
         student.enrollInCourse(course._id);
         student.totalCredits += course.credits;
 
+        // Save both and handle the promise properly
         return Promise.all([course.save(), student.save()]);
     })
-    .then(([course, student]) => {
+    .then(async (saved) => {
+        // Re-fetch the course and student to get updated data
+        const course = await Course.findOne({ courseCode: req.body.courseCode });
+        const student = await Student.findOne({ studentNumber: req.body.studentNumber });
+        
         // Emit real-time update
         const enrollmentData = {
             courseCode: course.courseCode,
             courseName: course.courseName,
-            enrollmentCount: course.enrolledStudents.length,
+            enrollmentCount: course.enrolledStudents ? course.enrolledStudents.length : 0,
             capacity: course.capacity,
             availableSeats: course.availableSeats,
             enrollmentPercentage: course.enrollmentPercentage,
@@ -91,7 +96,9 @@ exports.enrollStudent = function(req, res) {
     })
     .catch(err => {
         console.error('Enrollment error:', err);
-        res.status(500).json({ message: getErrorMessage(err) });
+        if (!res.headersSent) {
+            res.status(500).json({ message: getErrorMessage(err) });
+        }
     });
 };
 
@@ -124,12 +131,16 @@ exports.dropStudent = function(req, res) {
 
         return Promise.all([course.save(), student.save()]);
     })
-    .then(([course, student]) => {
+    .then(async (saved) => {
+        // Re-fetch the course and student to get updated data
+        const course = await Course.findOne({ courseCode: req.body.courseCode });
+        const student = await Student.findOne({ studentNumber: req.body.studentNumber });
+        
         // Emit real-time update
         const enrollmentData = {
             courseCode: course.courseCode,
             courseName: course.courseName,
-            enrollmentCount: course.enrolledStudents.length,
+            enrollmentCount: course.enrolledStudents ? course.enrolledStudents.length : 0,
             capacity: course.capacity,
             availableSeats: course.availableSeats,
             enrollmentPercentage: course.enrollmentPercentage,
@@ -153,7 +164,9 @@ exports.dropStudent = function(req, res) {
     })
     .catch(err => {
         console.error('Drop error:', err);
-        res.status(500).json({ message: getErrorMessage(err) });
+        if (!res.headersSent) {
+            res.status(500).json({ message: getErrorMessage(err) });
+        }
     });
 };
 

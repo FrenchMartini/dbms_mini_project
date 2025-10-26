@@ -26,14 +26,24 @@ BACKEND_PID=$!
 # Wait a moment for backend to start
 sleep 3
 
+# Wait for MongoDB to be ready
+echo "⏳ Waiting for MongoDB..."
+sleep 2
+
 # Check if backend is running
-if curl -s http://localhost:5000 > /dev/null; then
-    echo "✅ Backend server is running on http://localhost:5000"
+if curl -s http://localhost:5001 > /dev/null; then
+    echo "✅ Backend server is running on http://localhost:5001"
 else
     echo "❌ Backend server failed to start"
     kill $BACKEND_PID 2>/dev/null
     exit 1
 fi
+
+# Seed courses if database is empty
+echo "🌱 Checking if courses need to be seeded..."
+sleep 1
+node seed-courses.js > /dev/null 2>&1 &
+echo "✅ Courses checked/seeded"
 
 # Start the React client
 echo "🔧 Starting React client..."
@@ -52,8 +62,8 @@ REACT_PID=$!
 echo ""
 echo "🎉 System is starting up!"
 echo "========================="
-echo "Backend Server: http://localhost:5000"
-echo "GraphQL Playground: http://localhost:5000/graphql"
+echo "Backend Server: http://localhost:5001"
+echo "GraphQL Playground: http://localhost:5001/graphql"
 echo "React App: http://localhost:3000"
 echo ""
 echo "📋 Available Features:"
