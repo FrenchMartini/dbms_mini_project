@@ -1,12 +1,6 @@
-﻿// The server.js file is the main file of your Node.js application 
-// It will load the express.js file as a module to bootstrap your Express application
-//
-//The process.env.NODE_ENV variable is set to the default 'development'
-//value if itdoesn 't exist.
-// Set the 'NODE_ENV' variable
+﻿
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// Import socket manager
 const socketManager = require('./socket-manager');
 
 async function startServer() {
@@ -16,15 +10,11 @@ async function startServer() {
         http = require('http'),
         socketIo = require('socket.io');
 
-    // Create a new Mongoose connection instance
     var db = mongoose();
-    // Create a new Express application instance
     var app = await express();
 
-// Create HTTP server
 var server = http.createServer(app);
 
-// Initialize Socket.IO
 var io = socketIo(server, {
     cors: {
         origin: "http://localhost:3000",
@@ -34,31 +24,25 @@ var io = socketIo(server, {
     transports: ['websocket', 'polling']
 });
 
-// Set Socket.IO instance in manager
 socketManager.setSocketIO(io);
 
-// Socket.IO connection handling
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    // Join course room for real-time updates
     socket.on('join-course-room', (courseCode) => {
         socket.join(`course-${courseCode}`);
         console.log(`User ${socket.id} joined course room: ${courseCode}`);
     });
 
-    // Leave course room
     socket.on('leave-course-room', (courseCode) => {
         socket.leave(`course-${courseCode}`);
         console.log(`User ${socket.id} left course room: ${courseCode}`);
     });
 
-    // Handle enrollment updates
     socket.on('enrollment-update', (data) => {
         socket.to(`course-${data.courseCode}`).emit('enrollment-changed', data);
     });
 
-    // Handle course capacity updates
     socket.on('capacity-update', (data) => {
         socket.to(`course-${data.courseCode}`).emit('capacity-changed', data);
     });
